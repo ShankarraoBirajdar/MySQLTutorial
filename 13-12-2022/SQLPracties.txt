@@ -1,0 +1,322 @@
+mysql> create database sqltest;
+Query OK, 1 row affected (0.05 sec)
+
+mysql> show databases;
++----------------------+
+| Database             |
++----------------------+
+| sqltest              |
++----------------------+
+7 rows in set (0.00 sec)
+
+mysql> use sqltest;
+Database changed
+mysql> show tables;
+Empty set (0.00 sec)
+
+mysql> create table Employee(id int, name varchar(20), age int, gender char, salary double, doj date);
+Query OK, 0 rows affected (0.18 sec)
+
+mysql> show tables;
++-------------------+
+| Tables_in_sqltest |
++-------------------+
+| employee          |
++-------------------+
+1 row in set (0.00 sec)
+
+mysql> desc employee;
++--------+-------------+------+-----+---------+-------+
+| Field  | Type        | Null | Key | Default | Extra |
++--------+-------------+------+-----+---------+-------+
+| id     | int         | YES  |     | NULL    |       |
+| name   | varchar(20) | YES  |     | NULL    |       |
+| age    | int         | YES  |     | NULL    |       |
+| gender | char(1)     | YES  |     | NULL    |       |
+| salary | double      | YES  |     | NULL    |       |
+| doj    | date        | YES  |     | NULL    |       |
++--------+-------------+------+-----+---------+-------+
+6 rows in set (0.01 sec)
+
+mysql> alter table employee add isAdmin boolean;
+Query OK, 0 rows affected (0.06 sec)
+Records: 0  Duplicates: 0  Warnings: 0
+
+mysql> select * from employee;
++------+---------+------+--------+--------+------------+---------+
+| id   | name    | age  | gender | salary | doj        | isAdmin |
++------+---------+------+--------+--------+------------+---------+
+|    1 | Shankar |   27 | M      |  10000 | 2017-01-01 |    NULL |
++------+---------+------+--------+--------+------------+---------+
+1 row in set (0.00 sec)
+
+
+mysql> delete from employee;
+Query OK, 2 rows affected (0.03 sec)
+
+mysql> select * from employee;
+Empty set (0.00 sec)
+
+mysql> insert into employee values(1,"Shankar",27,'M', 10000.00, '2017-01-01',1);
+Query OK, 1 row affected (0.04 sec)
+
+mysql> select * from employee;
++------+---------+------+--------+--------+------------+---------+
+| id   | name    | age  | gender | salary | doj        | isAdmin |
++------+---------+------+--------+--------+------------+---------+
+|    1 | Shankar |   27 | M      |  10000 | 2017-01-01 |       1 |
++------+---------+------+--------+--------+------------+---------+
+1 row in set (0.00 sec)
+
+mysql> insert into employee values(2,"Onkar",26,'M', 20000.00, '2017-02-01',0);
+Query OK, 1 row affected (0.07 sec)
+
+mysql> alter table employee MODIFY COLUMN name int primary key;
+ERROR 1366 (HY000): Incorrect integer value: 'Shankar' for column 'name' at row 1
+mysql> alter table employee MODIFY COLUMN id int primary key;
+Query OK, 0 rows affected (8.26 sec)
+Records: 0  Duplicates: 0  Warnings: 0
+
+mysql> insert into employee values(2,"Onkar",26,'M', 20000.00, '2017-02-01',0);
+ERROR 1062 (23000): Duplicate entry '2' for key 'employee.PRIMARY'
+mysql> desc employee;
++---------+-------------+------+-----+---------+-------+
+| Field   | Type        | Null | Key | Default | Extra |
++---------+-------------+------+-----+---------+-------+
+| id      | int         | NO   | PRI | NULL    |       |
+| name    | varchar(20) | YES  |     | NULL    |       |
+| age     | int         | YES  |     | NULL    |       |
+| gender  | char(1)     | YES  |     | NULL    |       |
+| salary  | double      | YES  |     | NULL    |       |
+| doj     | date        | YES  |     | NULL    |       |
+| isAdmin | tinyint(1)  | YES  |     | NULL    |       |
++---------+-------------+------+-----+---------+-------+
+7 rows in set (0.00 sec)
+
+mysql> alter table employee MODIFY COLUMN name varchar(20) NOT NULL;
+Query OK, 0 rows affected (4.76 sec)
+Records: 0  Duplicates: 0  Warnings: 0
+
+mysql> alter table employee MODIFY COLUMN age int NOT NULL;
+Query OK, 0 rows affected (3.35 sec)
+Records: 0  Duplicates: 0  Warnings: 0
+
+mysql> alter table employee MODIFY COLUMN isAdmin boolean NOT NULL;
+Query OK, 0 rows affected (2.20 sec)
+Records: 0  Duplicates: 0  Warnings: 0
+
+
+mysql> alter table employee MODIFY COLUMN salary double NOT NULL;
+Query OK, 0 rows affected (0.37 sec)
+Records: 0  Duplicates: 0  Warnings: 0
+
+mysql> alter table employee MODIFY COLUMN gender char NOT NULL;
+Query OK, 0 rows affected (0.33 sec)
+Records: 0  Duplicates: 0  Warnings: 0
+
+mysql> desc employee;
++---------+-------------+------+-----+---------+-------+
+| Field   | Type        | Null | Key | Default | Extra |
++---------+-------------+------+-----+---------+-------+
+| id      | int         | NO   | PRI | NULL    |       |
+| name    | varchar(20) | NO   |     | NULL    |       |
+| age     | int         | NO   |     | NULL    |       |
+| gender  | char(1)     | NO   |     | NULL    |       |
+| salary  | double      | NO   |     | NULL    |       |
+| doj     | date        | NO   |     | NULL    |       |
+| isAdmin | tinyint(1)  | NO   |     | NULL    |       |
++---------+-------------+------+-----+---------+-------+
+7 rows in set (0.00 sec)
+
+mysql> select * from employee;
++----+---------+-----+--------+--------+------------+---------+
+| id | name    | age | gender | salary | doj        | isAdmin |
++----+---------+-----+--------+--------+------------+---------+
+|  1 | Shankar |  27 | M      |  10000 | 2017-01-01 |       1 |
+|  2 | Onkar   |  26 | M      |  20000 | 2017-02-01 |       0 |
++----+---------+-----+--------+--------+------------+---------+
+2 rows in set (0.00 sec)
+
+mysql> select * from employee order by age;
++----+---------+-----+--------+--------+------------+---------+
+| id | name    | age | gender | salary | doj        | isAdmin |
++----+---------+-----+--------+--------+------------+---------+
+|  2 | Onkar   |  26 | M      |  20000 | 2017-02-01 |       0 |
+|  1 | Shankar |  27 | M      |  10000 | 2017-01-01 |       1 |
++----+---------+-----+--------+--------+------------+---------+
+2 rows in set (0.00 sec)
+
+mysql>  insert into employee values(3,"Pooja",26,'F', 30000.00, '2018-02-01',0);
+Query OK, 1 row affected (0.98 sec)
+
+mysql>  insert into employee values(4,"Dhaneshwari",27,'F', 40000.00, '2018-06-01',0);
+Query OK, 1 row affected (0.07 sec)
+
+mysql>  insert into employee values(5,"Priyanka",27,'F', 50000.00, '2019-05-01',0);
+Query OK, 1 row affected (0.10 sec)
+
+mysql>  insert into employee values(6,"Aman",27,'M', 60000.00, '2020-08-15',0);
+Query OK, 1 row affected (0.05 sec)
+
+mysql> select * from Employee;
++----+-------------+-----+--------+--------+------------+---------+
+| id | name        | age | gender | salary | doj        | isAdmin |
++----+-------------+-----+--------+--------+------------+---------+
+|  1 | Shankar     |  27 | M      |  10000 | 2017-01-01 |       1 |
+|  2 | Onkar       |  26 | M      |  20000 | 2017-02-01 |       0 |
+|  3 | Pooja       |  26 | F      |  30000 | 2018-02-01 |       0 |
+|  4 | Dhaneshwari |  27 | F      |  40000 | 2018-06-01 |       0 |
+|  5 | Priyanka    |  27 | F      |  50000 | 2019-05-01 |       0 |
+|  6 | Aman        |  27 | M      |  60000 | 2020-08-15 |       0 |
++----+-------------+-----+--------+--------+------------+---------+
+6 rows in set (0.00 sec)
+
+mysql> select gender,count(*) from employee group by gender;
++--------+----------+
+| gender | count(*) |
++--------+----------+
+| M      |        3 |
+| F      |        3 |
++--------+----------+
+2 rows in set (0.03 sec)
+
+mysql> select gender,count(*) from employee where gender='M' group by gender;
++--------+----------+
+| gender | count(*) |
++--------+----------+
+| M      |        3 |
++--------+----------+
+1 row in set (0.08 sec)
+
+mysql> select gender,count(*) from employee  group by gender having gender!='F';
++--------+----------+
+| gender | count(*) |
++--------+----------+
+| M      |        3 |
++--------+----------+
+1 row in set (0.00 sec)
+
+mysql> select gender,count(*) from employee  group by gender having gender='M';
++--------+----------+
+| gender | count(*) |
++--------+----------+
+| M      |        3 |
++--------+----------+
+1 row in set (0.00 sec)
+
+mysql> select name, salary from employee limit 1;
++---------+--------+
+| name    | salary |
++---------+--------+
+| Shankar |  10000 |
++---------+--------+
+1 row in set (0.00 sec)
+
+mysql> select name, salary from employee limit 2;
++---------+--------+
+| name    | salary |
++---------+--------+
+| Shankar |  10000 |
+| Onkar   |  20000 |
++---------+--------+
+2 rows in set (0.00 sec)
+
+mysql> select name, salary from employee limit 2;
++---------+--------+
+| name    | salary |
++---------+--------+
+| Shankar |  10000 |
+| Onkar   |  20000 |
++---------+--------+
+2 rows in set (0.00 sec)
+
+mysql> select distinct(salary) from employee order by salary desc;
++--------+
+| salary |
++--------+
+|  60000 |
+|  50000 |
+|  40000 |
+|  30000 |
+|  20000 |
+|  10000 |
++--------+
+6 rows in set (0.00 sec)
+
+mysql> select distinct(salary) from employee order by salary desc limit 1;
++--------+
+| salary |
++--------+
+|  60000 |
++--------+
+1 row in set (0.00 sec)
+
+mysql> select distinct(salary) from employee order by salary desc limit 3;
++--------+
+| salary |
++--------+
+|  60000 |
+|  50000 |
+|  40000 |
++--------+
+3 rows in set (0.00 sec)
+
+
+mysql> select * from employee where salary =(select distinct(salary) from employee order by salary desc limit 1);
++----+------+-----+--------+--------+------------+---------+
+| id | name | age | gender | salary | doj        | isAdmin |
++----+------+-----+--------+--------+------------+---------+
+|  6 | Aman |  27 | M      |  60000 | 2020-08-15 |       0 |
++----+------+-----+--------+--------+------------+---------+
+1 row in set (0.06 sec)
+
+mysql> select distinct(salary) from employee order by salary desc limit 2,1;
++--------+
+| salary |
++--------+
+|  40000 |
++--------+
+1 row in set (0.00 sec)
+
+mysql> select distinct(salary) from employee order by salary desc limit 0,1;
++--------+
+| salary |
++--------+
+|  60000 |
++--------+
+1 row in set (0.00 sec)
+
+mysql> select distinct(salary) from employee order by salary desc limit 1,1;
++--------+
+| salary |
++--------+
+|  50000 |
++--------+
+1 row in set (0.00 sec)
+
+mysql> select distinct(salary) from employee order by salary desc limit 3,1;
++--------+
+| salary |
++--------+
+|  30000 |
++--------+
+1 row in set (0.00 sec)
+
+mysql> select distinct(salary) from employee order by salary desc limit 4,1;
++--------+
+| salary |
++--------+
+|  20000 |
++--------+
+1 row in set (0.00 sec)
+
+mysql> select distinct(salary) from employee order by salary desc limit 5,1;
++--------+
+| salary |
++--------+
+|  10000 |
++--------+
+1 row in set (0.00 sec)
+
+mysql> select distinct(salary) from employee order by salary desc limit 6,1;
+Empty set (0.00 sec)
